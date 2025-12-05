@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Murat 💜 Tülin — Magical Page</title>
+  <style>
+    /* -------------------------
+       Base / fonts / layout
+       ------------------------- */
+    :root{
+      --purple-1:#b473ff;
+      --purple-2:#7a1dd5;
+      --bg-1:#f3e6ff;
+      --card:#ffffff;
+      --accent:#7f3dff;
+    }
+    html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Segoe UI,Roboto,Arial;color:var(--purple-2);background:var(--bg-1);-webkit-font-smoothing:antialiased;}
+    .wrap{min-height:100vh;display:flex;flex-direction:column;align-items:stretch;}
+
+    /* -------------------------
+       Animated soft background
+       ------------------------- */
+    body::before{
+      content:"";
+      position:fixed;inset:0;
+      background: linear-gradient(120deg, rgba(186,129,255,0.18), rgba(139,92,255,0.12) 40%, rgba(243,230,255,0.14));
+      z-index:-2;
+      animation: gradientShift 12s ease-in-out infinite;
+      filter: blur(40px) saturate(120%);
+    }
+    @keyframes gradientShift{
+      0%{transform:scale(1) translateY(0);}
+      50%{transform:scale(1.03) translateY(-20px);}
+      100%{transform:scale(1) translateY(0);}
+    }
+
+    /* Landing */
+    #landing{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(180deg,var(--purple-1),#9760ff);color:white;gap:18px;padding:28px;}
+    #landing h1{font-size:2.6rem;margin:0;letter-spacing:0.2px;opacity:0;transform:translateY(8px);animation:fadeInUp 1200ms forwards;}
+    #landing p{opacity:0;animation:fadeInUp 1400ms 1 forwards; color:rgba(255,255,255,0.95)}
+    #enterBtn{padding:12px 26px;border-radius:999px;border:none;background:white;color:var(--purple-2);font-size:1.05rem;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,0.12);animation:pulse 2.2s infinite;}
+    @keyframes fadeInUp{to{opacity:1;transform:none}}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+    /* Main card */
+    #mainPage{display:none;padding:34px 18px 80px;min-height:100vh;box-sizing:border-box;}
+    .card{background:var(--card);max-width:720px;margin:20px auto;padding:28px;border-radius:18px;box-shadow:0 10px 40px rgba(122,29,213,0.08);text-align:center;position:relative;}
+    .card h1{margin:0;font-size:2.1rem;color:var(--purple-2)}
+    .hearts{font-size:2.4rem;margin:10px 0;display:inline-block;animation:pop 1.6s infinite;color:var(--accent);filter:drop-shadow(0 0 10px rgba(127,61,255,0.45));}
+    @keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+    ul{list-style:none;padding:0;margin:18px 0;text-align:left;font-size:1.05rem}
+    ul li::before{content:"💜 ";margin-right:6px}
+    .countdown{margin-top:10px;font-weight:700;color:var(--purple-2)}
+
+    /* Typing effect */
+    .typing-wrap{height:34px;margin:14px 0;}
+    .typing{font-size:1.1rem;color:var(--purple-2);display:inline-block;white-space:nowrap;overflow:hidden;border-right:2px solid var(--purple-2);padding-right:6px}
+    .typing.fade{opacity:0;transition:opacity .4s}
+
+    /* Heart rain */
+    .heart{position:fixed;top:-10px;font-size:20px;animation:fall linear infinite;color:#b066ff;z-index:9999;filter:drop-shadow(0 0 10px rgba(176,102,255,0.75));opacity:0.95}
+    @keyframes fall{0%{transform:translateY(-5vh) rotate(0deg);opacity:1}100%{transform:translateY(115vh) rotate(360deg);opacity:0}}
+
+    /* Balloons */
+    .balloon {position:fixed;bottom:-120px;width:48px;height:64px;border-radius:22px;background:linear-gradient(180deg,#cfa8ff,#9b5bff);box-shadow:0 8px 20px rgba(0,0,0,0.12);opacity:0.95;z-index:2}
+    .balloon::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:28px;background:rgba(0,0,0,0.06);transform:translateX(-50%)}
+
+    /* Floating Heart Button */
+    .floating-heart {
+      position:fixed;right:22px;bottom:22px;width:66px;height:66px;border-radius:50%;background:linear-gradient(180deg,#b96bff,#7f3dff);display:flex;align-items:center;justify-content:center;color:white;font-size:28px;z-index:99999;cursor:pointer;
+      box-shadow:0 10px 30px rgba(127,61,255,0.28),0 0 22px rgba(155,91,255,0.18);
+      animation:floatBtn 3s ease-in-out infinite;
+      transition:transform .18s ease,box-shadow .18s ease;
+      filter:drop-shadow(0 0 24px rgba(183,115,255,0.48));
+    }
+    .floating-heart:hover{transform:scale(1.08);box-shadow:0 14px 40px rgba(155,91,255,0.35)}
+    @keyframes floatBtn{0%{transform:translateY(0)}50%{transform:translateY(-12px)}100%{transform:translateY(0)}}
+
+    /* Popup */
+    .popup {
+      position:fixed;right:20px;bottom:100px;width:360px;max-width:92vw;background:white;border-radius:16px;padding:18px;box-shadow:0 20px 60px rgba(30,10,60,0.18);z-index:100000;transform:translateY(20px) scale(.98);opacity:0;pointer-events:none;
+      transition:opacity .28s ease,transform .28s cubic-bezier(.2,.9,.2,1);
+    }
+    .popup.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+
+    .popup h3{margin:0 0 8px 0;color:var(--purple-2)}
+    .message{font-size:0.98rem;color:#4b2b7a;margin-bottom:10px}
+    .actions{display:flex;gap:8px;align-items:center}
+
+    .btn{padding:8px 12px;border-radius:12px;border:none;cursor:pointer;background:var(--accent);color:white;font-weight:600}
+    .btn.secondary{background:transparent;border:1px solid rgba(122,29,213,0.12);color:var(--purple-2)}
+    .close-x{position:absolute;top:8px;right:10px;font-size:18px;cursor:pointer;color:rgba(80,24,150,0.9)}
+
+    /* Sparkle reveal */
+    .sparkle-wrap{position:relative;display:inline-block;margin-top:10px}
+    .reveal-text{font-size:1.35rem;font-weight:700;color:var(--purple-2);opacity:0;transform:translateY(6px);transition:all .45s cubic-bezier(.2,.9,.2,1)}
+    .sparkle{position:absolute;left:0;top:0;pointer-events:none;opacity:0;mix-blend-mode:screen}
+    .sparkle.show{opacity:1;animation:twinkle 800ms ease-out}
+    @keyframes twinkle{
+      0%{transform:scale(.6) translateY(6px);opacity:0}50%{transform:scale(1.05) translateY(-6px);opacity:1}100%{transform:scale(1) translateY(0);opacity:0}
+    }
+
+    @media (max-width:520px){
+      .card{margin:12px;padding:18px}
+      #landing h1{font-size:2rem}
+      .popup{left:6vw;right:6vw;bottom:90px;width:auto}
+      .floating-heart{right:14px;bottom:14px;width:56px;height:56px;font-size:24px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- Landing -->
+    <section id="landing">
+      <h1>Welcome Tülin 💜</h1>
+      <p>11 Monate zusammen — und für immer.</p>
+      <button id="enterBtn">Enter</button>
+    </section>
+
+    <!-- Main -->
+    <section id="mainPage">
+      <div class="card" id="mainCard">
+        <h1>Murat 💜 Tülin</h1>
+        <div class="hearts">💜💜💜</div>
+
+        <div class="typing-wrap"><span id="typing" class="typing"></span></div>
+
+        <h2>11 Monate zusammen und für immer zusammen</h2>
+
+        <h3>Sachen die ich an dir liebe</h3>
+        <ul>
+          <li>Your eyes</li>
+          <li>Your Smile</li>
+          <li>Your Hair</li>
+          <li>I feel home when I'm with you</li>
+          <li>Your Hair is so beautiful</li>
+        </ul>
+
+        <div class="countdown" id="countdown"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Floating Glow Heart Button -->
+  <div class="floating-heart" id="floatingHeart">💖</div>
+
+  <!-- Popup -->
+  <div class="popup" id="popupPanel">
+    <div class="close-x" id="popupClose">✕</div>
+    <h3>Surprise for Tülin 💜</h3>
+    <div class="message">Open this and enjoy — little surprises inside ✨</div>
+
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="sparkle-wrap">
+        <div class="reveal-text" id="revealText">I love you</div>
+        <svg class="sparkle" id="sparkleSVG" width="120" height="40" viewBox="0 0 120 40" style="left:-8px;top:-6px;">
+          <g fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10 L24 18 L32 20 L24 22 L20 30 L18 22 L10 20 L18 18 Z" fill="#ffd9ff" opacity="0.9"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;font-size:0.95rem;color:rgba(75,43,122,0.95)">
+      <em>Hold the heart to see extra message ✨</em>
+    </div>
+  </div>
+
+  <!-- NO AUDIO ELEMENT ANYMORE -->
+
+  <script>
+    const enterBtn = document.getElementById('enterBtn');
+    const landing = document.getElementById('landing');
+    const mainPage = document.getElementById('mainPage');
+    const typingEl = document.getElementById('typing');
+    const countdownEl = document.getElementById('countdown');
+    const floatingHeart = document.getElementById('floatingHeart');
+    const popup = document.getElementById('popupPanel');
+    const popupClose = document.getElementById('popupClose');
+    const revealText = document.getElementById('revealText');
+    const sparkleSVG = document.getElementById('sparkleSVG');
+
+    /* Landing → Main transition */
+    enterBtn.addEventListener('click', () => {
+      landing.style.transition = 'transform .8s ease, opacity .6s ease';
+      landing.style.transform = 'translateY(-30vh) scale(.98)';
+      landing.style.opacity = '0';
+      setTimeout(() => {
+        landing.style.display = 'none';
+        mainPage.style.display = 'block';
+      }, 520);
+    });
+
+    /* Typing messages */
+    const messages = [
+      "I love you more than words can say 💜",
+      "You make my days brighter ☀️",
+      "Forever and always — Murat",
+      "Danke für die schönsten 11 Monate ❤️"
+    ];
+    let msgIndex = 0;
+
+    function typeMessage(msg, done){
+      typingEl.textContent = '';
+      typingEl.classList.remove('fade');
+      let i=0;
+      const speed = 45;
+
+      function step(){
+        if(i<msg.length){
+          typingEl.textContent += msg[i++];
+          setTimeout(step, speed);
+        } else {
+          setTimeout(()=>{ typingEl.classList.add('fade'); setTimeout(done,600); }, 1100);
+        }
+      }
+      step();
+    }
+
+    (function loopTyping(){
+      typeMessage(messages[msgIndex], ()=>{ msgIndex=(msgIndex+1)%messages.length; loopTyping(); });
+    })();
+
+    /* Countdown */
+    const target = new Date('Dec 6, 2025 00:00:00').getTime();
+    setInterval(()=> {
+      const now = Date.now();
+      const d = Math.max(0, target - now);
+      const days = Math.floor(d/(1000*60*60*24));
+      const hours = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+      const minutes = Math.floor((d%(1000*60*60))/(1000*60));
+      const seconds = Math.floor((d%(1000*60))/1000);
+      countdownEl.textContent = `Countdown to Our Anniversary: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+
+    /* Heart rain */
+    function spawnHeart(){
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = '💜';
+      h.style.left = Math.random()*100 + 'vw';
+      h.style.fontSize = (14 + Math.random()*18) + 'px';
+      h.style.animationDuration = (4 + Math.random()*4) + 's';
+      h.style.opacity = (0.6 + Math.random()*0.4);
+      document.body.appendChild(h);
+      setTimeout(()=> h.remove(), 8000);
+    }
+    setInterval(spawnHeart, 300);
+
+    /* Balloons */
+    function spawnBalloon(){
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      const left = 5 + Math.random()*90;
+      b.style.left = left + 'vw';
+      const scale = 0.8 + Math.random()*1.2;
+      b.style.transform = 'scale('+scale+')';
+      const duration = 8 + Math.random()*10;
+      b.style.transition = `transform ${duration}s linear, bottom ${duration}s linear, left ${duration}s ease-in-out`;
+      document.body.appendChild(b);
+      requestAnimationFrame(()=>{
+        b.style.bottom = (110 + Math.random()*40) + 'vh';
+        b.style.left = Math.max(2, Math.min(96, left + (Math.random()*20 - 10))) + 'vw';
+      });
+      setTimeout(()=> b.remove(), (duration*1000)+1200);
+    }
+    setInterval(spawnBalloon, 2800);
+
+    /* Popup open + sparkle */
+    floatingHeart.addEventListener('click', ()=> {
+      if(popup.classList.contains('open')){
+        popup.classList.remove('open');
+      } else {
+        popup.classList.add('open');
+        revealText.style.opacity = '1';
+        revealText.style.transform = 'translateY(0)';
+        sparkleSVG.classList.add('show');
+        setTimeout(()=> sparkleSVG.classList.remove('show'), 900);
+      }
+    });
+
+    popupClose.addEventListener('click', ()=> popup.classList.remove('open'));
+
+    /* Hidden long press message (no music) */
+    let pressTimer;
+    floatingHeart.addEventListener('pointerdown', ()=> {
+      pressTimer = setTimeout(()=> {
+        // This is the hidden note you requested earlier
+        alert("You found a hidden note: Ich liebe dich ❤️");
+      }, 900);
+    });
+    ['pointerup','pointerleave','pointercancel'].forEach(ev =>
+      floatingHeart.addEventListener(ev, ()=> clearTimeout(pressTimer))
+    );
+
+    /* Close popup with ESC */
+    window.addEventListener('keydown', (e)=> {
+      if(e.key==='Escape') popup.classList.remove('open');
+    });
+
+  </script>
+</body>
+</html>
